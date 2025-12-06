@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -21,27 +22,16 @@ public class CubeSpawner : MonoBehaviour
     {
         _cubesPool = new ObjectPool<Cube>(
             createFunc: () => CreateNewCube(),
-            actionOnDestroy: (cube) => DestroyPooledCube(cube),
+            actionOnDestroy: (cube) => DestroyPooledCube(cube), actionOnRelease:
+            (cube) => ReturnCubeToPool(cube),
             defaultCapacity: 50,
             maxSize: 500
             );
     }
 
-    private void OnEnable()
-    {
-        //_isSpawning = true;
-        //_spawnInterval = 1f / _cubesPerSecond;
-    }
-
     private void Start()
     {
-
-        //_isSpawning = true;
-        //_spawnInterval = 1f / _cubesPerSecond;
-
         StartSpawningCubes();
-
-        //StartCoroutine(SpawnCubesOverTime(_spawnInterval));
     }
 
     private Cube CreateNewCube()
@@ -49,6 +39,11 @@ public class CubeSpawner : MonoBehaviour
         Cube newCube = Instantiate(_cubePrefab);
         newCube.ReadyToBePooled += OnCubeReadyToBePooled;
         return newCube;
+    }
+
+    private void ReturnCubeToPool(Cube cube)
+    {
+        cube.gameObject.SetActive(false);
     }
 
     private void DestroyPooledCube(Cube cube)
