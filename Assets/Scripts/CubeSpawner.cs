@@ -106,10 +106,12 @@ public class CubeSpawner : MonoBehaviour
 
     private IEnumerator SpawnCubesOverTime()
     {
+        WaitForSeconds countdownTimer = new WaitForSeconds(_spawnInterval);
+
         while (_isSpawning)
         {
             SpawnCube();
-            yield return new WaitForSeconds(_spawnInterval);
+            yield return countdownTimer;
         }
     }
 }

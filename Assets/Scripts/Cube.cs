@@ -20,14 +20,24 @@ public class Cube : MonoBehaviour
         _defaultColor = _renderer.material.color;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (_hasLanded == false && collision.gameObject.TryGetComponent<Cube>(out Cube cube) == false)
+        {
+            _hasLanded = true;
+            _colorChanger.ChangeColorToRandom(_renderer.material);
+            StartCoroutine(MessageAfterDelay(UnityEngine.Random.Range(minTimeAfterCollision, maxTimeAfterCollision)));
+        }
+    }
+
     public void Activate(Vector3 position)
     {
         _hasLanded = false;
-        this.transform.position = position;
-        SetColor(_defaultColor);
+        transform.position = position;
+        transform.rotation = Quaternion.identity;
         _rigidBody.linearVelocity = Vector3.zero;
         _rigidBody.angularVelocity = Vector3.zero;
-        transform.rotation = Quaternion.identity;
+        SetColor(_defaultColor);
         gameObject.SetActive(true);
     }
 
@@ -40,15 +50,5 @@ public class Cube : MonoBehaviour
     private void SetColor(Color newColor)
     {
         _renderer.material.color = newColor;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (_hasLanded == false && collision.gameObject.tag == "Obstacle")
-        {
-            _hasLanded = true;
-            _colorChanger.ChangeColorToRandom(_renderer.material);
-            StartCoroutine(MessageAfterDelay(UnityEngine.Random.Range(minTimeAfterCollision, maxTimeAfterCollision)));
-        }
     }
 }
