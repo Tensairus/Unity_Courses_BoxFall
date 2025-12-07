@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.Properties;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -16,6 +15,9 @@ public class CubeSpawner : MonoBehaviour
 
     private ObjectPool<Cube> _cubesPool;
 
+    private int _poolDefaultCapacity = 50;
+    private int _poolMaxSize = 500;
+
     private float _spawnInterval;
 
     private void Awake()
@@ -24,8 +26,8 @@ public class CubeSpawner : MonoBehaviour
             createFunc: () => CreateNewCube(),
             actionOnDestroy: (cube) => DestroyPooledCube(cube), actionOnRelease:
             (cube) => ReturnCubeToPool(cube),
-            defaultCapacity: 50,
-            maxSize: 500
+            defaultCapacity: _poolDefaultCapacity,
+            maxSize: _poolMaxSize
             );
     }
 

@@ -37,7 +37,7 @@ public class Cube : MonoBehaviour
         transform.rotation = Quaternion.identity;
         _rigidBody.linearVelocity = Vector3.zero;
         _rigidBody.angularVelocity = Vector3.zero;
-        SetColor(_defaultColor);
+        _colorChanger.SetColor(_renderer.material, _defaultColor);
         gameObject.SetActive(true);
     }
 
@@ -45,10 +45,5 @@ public class Cube : MonoBehaviour
     {
         yield return new WaitForSeconds(delaySeconds);
         ReadyToBePooled?.Invoke(this);
-    }
-
-    private void SetColor(Color newColor)
-    {
-        _renderer.material.color = newColor;
     }
 }
